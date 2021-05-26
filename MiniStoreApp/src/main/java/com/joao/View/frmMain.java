@@ -5,18 +5,24 @@
  */
 package com.joao.View;
 
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author MateyR
  */
 public class frmMain extends javax.swing.JFrame {
-
+    
+    private DefaultTableModel tblModel;
+    int id = 1;
     /**
      * Creates new form frmMain
      */
     public frmMain() {
         initComponents();
+        tblModel = (DefaultTableModel) tblProducts.getModel();
     }
+   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -45,10 +51,10 @@ public class frmMain extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblProducts = new javax.swing.JTable();
         pnlButton = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
+        btnSell = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -126,6 +132,8 @@ public class frmMain extends javax.swing.JFrame {
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(3, 3, 3, 3);
         pnlProducts.add(txtPrice, gridBagConstraints);
+
+        spnCant.setModel(new javax.swing.SpinnerNumberModel(1, 1, 1000, 1));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
@@ -151,11 +159,7 @@ public class frmMain extends javax.swing.JFrame {
 
         tblProducts.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "Id", "Codigo", "Nombre", "Precio", "Cantidad", "Tipo Producto"
@@ -169,17 +173,27 @@ public class frmMain extends javax.swing.JFrame {
 
         pnlButton.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
-        jButton1.setText("Agregar ");
-        pnlButton.add(jButton1);
+        btnAdd.setText("Agregar ");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+        pnlButton.add(btnAdd);
 
-        jButton2.setText("Eliminar");
-        pnlButton.add(jButton2);
+        btnDelete.setText("Eliminar");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+        pnlButton.add(btnDelete);
 
-        jButton3.setText("Modificar");
-        pnlButton.add(jButton3);
+        btnEdit.setText("Modificar");
+        pnlButton.add(btnEdit);
 
-        jButton4.setText("Vender");
-        pnlButton.add(jButton4);
+        btnSell.setText("Vender");
+        pnlButton.add(btnSell);
 
         pnlTable.add(pnlButton, java.awt.BorderLayout.PAGE_END);
 
@@ -187,12 +201,32 @@ public class frmMain extends javax.swing.JFrame {
 
         getContentPane().add(pnlTableProducts, java.awt.BorderLayout.CENTER);
 
-        pack();
+        setSize(new java.awt.Dimension(596, 502));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNameActionPerformed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+     
+       Object[] producto = new Object[6];
+      
+       producto[0] = id++;
+       producto[1] = txtCode.getText();
+       producto[2] = txtName.getText();
+       producto[3] = txtPrice.getText();
+       producto[4] = spnCant.getValue();
+       producto[5] = cmbTypePro.getSelectedItem().toString();
+       
+       tblModel.addRow(producto);   
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+       int row = tblProducts.getSelectedRow();
+       tblModel.removeRow(row);
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -230,11 +264,11 @@ public class frmMain extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnSell;
     private javax.swing.JComboBox<String> cmbTypePro;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
