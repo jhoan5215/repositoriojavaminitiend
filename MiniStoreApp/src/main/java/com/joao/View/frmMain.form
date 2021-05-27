@@ -269,6 +269,9 @@
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Vender"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSellActionPerformed"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>

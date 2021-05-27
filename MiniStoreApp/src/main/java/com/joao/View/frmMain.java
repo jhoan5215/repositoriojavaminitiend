@@ -19,15 +19,16 @@ public class frmMain extends javax.swing.JFrame {
     
     private DefaultTableModel tblModel;
     int id = 1;
-    
-    Connection cn;
-    PreparedStatement pst;
-    ResultSet rs;
+    double iva = 0;
+    private Connection cn;
+    private PreparedStatement pst;
+    private ResultSet rs;
     
     /**
      * Creates new form frmMain
      */
-    public frmMain() {
+    public frmMain()
+    {
         initComponents();
         tblModel = (DefaultTableModel) tblProducts.getModel();
     }
@@ -202,6 +203,11 @@ public class frmMain extends javax.swing.JFrame {
         pnlButton.add(btnEdit);
 
         btnSell.setText("Vender");
+        btnSell.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSellActionPerformed(evt);
+            }
+        });
         pnlButton.add(btnSell);
 
         pnlTable.add(pnlButton, java.awt.BorderLayout.PAGE_END);
@@ -232,27 +238,29 @@ public class frmMain extends javax.swing.JFrame {
        tblModel.addRow(producto);
        
        cn=conecta.abrebase();
-        try {
+        try 
+        {
             pst=cn.prepareStatement("INSERT INTO productos (codigo, nombre, precio, cantidad) VALUES (?,?,?,?)");
             pst.setString(1,txtCode.getText());
             pst.setString(2,txtName.getText());
             pst.setString(3,txtPrice.getText());
             pst.setString(4,spnCant.getValue().toString()); //cast
             int res = pst.executeUpdate();
-            if (res > 0) {
+            if (res > 0)
+            {
                 JOptionPane.showMessageDialog(null, "Producto Ingresado");
                 blancos();
-            } else {
+            } else
+            {
                JOptionPane.showMessageDialog(null, "ERROR");
              
                 blancos();
             }
             cn.close();
-        } catch (Exception ex) {
+        } catch (Exception ex)
+        {
            
         }
-       
-       
     }//GEN-LAST:event_btnAddActionPerformed
 
     
@@ -265,13 +273,43 @@ public class frmMain extends javax.swing.JFrame {
         spnCant.setValue(null);
         txtCode.setEditable(true);
         txtCode.requestFocus();
-     }
+    }
     
     
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
        int row = tblProducts.getSelectedRow();
+       if(row < 0){
+           JOptionPane.showMessageDialog(null, "Oe prix no has selecionado el que quieres Eliminar");
+       }
        tblModel.removeRow(row);
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnSellActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSellActionPerformed
+        int row = tblProducts.getSelectedRow();
+        
+        if(row < 0)
+        {
+           JOptionPane.showMessageDialog(null, "Oe prix no has selecionado un producto para Vender andas Dormido");
+        }
+      
+        String producType = (String) tblProducts.getValueAt(row, 5);  // We got the Type
+         
+        int cant = (int) tblProducts.getValueAt(row, 4);  // We got the amount
+        
+        double precio = Double.parseDouble((String) tblProducts.getValueAt(row, 3)) ;  // We got the price
+   
+        switch(producType){
+            case "Papeleria": {iva = 0.19;break;}
+            case "SuperMercado" :{iva =0.04 ;break;}
+            case "Drogeria" : {iva = 0.12;break;}
+        }
+        
+        double total = ((cant * precio) * iva);
+        
+        JOptionPane.showMessageDialog(null, " The Price For this Product is "+ precio + "\n"
+                            + "The Total you have to pay is : "+ total);
+     
+    }//GEN-LAST:event_btnSellActionPerformed
 
     /**
      * @param args the command line arguments
