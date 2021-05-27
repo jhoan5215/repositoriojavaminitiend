@@ -5,6 +5,10 @@
  */
 package com.joao.View;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -15,6 +19,11 @@ public class frmMain extends javax.swing.JFrame {
     
     private DefaultTableModel tblModel;
     int id = 1;
+    
+    Connection cn;
+    PreparedStatement pst;
+    ResultSet rs;
+    
     /**
      * Creates new form frmMain
      */
@@ -220,9 +229,45 @@ public class frmMain extends javax.swing.JFrame {
        producto[4] = spnCant.getValue();
        producto[5] = cmbTypePro.getSelectedItem().toString();
        
-       tblModel.addRow(producto);   
+       tblModel.addRow(producto);
+       
+       cn=conecta.abrebase();
+        try {
+            pst=cn.prepareStatement("INSERT INTO productos (codigo, nombre, precio, cantidad) VALUES (?,?,?,?)");
+            pst.setString(1,txtCode.getText());
+            pst.setString(2,txtName.getText());
+            pst.setString(3,txtPrice.getText());
+            pst.setString(4,spnCant.getValue().toString()); //cast
+            int res = pst.executeUpdate();
+            if (res > 0) {
+                JOptionPane.showMessageDialog(null, "Producto Ingresado");
+                blancos();
+            } else {
+               JOptionPane.showMessageDialog(null, "ERROR");
+             
+                blancos();
+            }
+            cn.close();
+        } catch (Exception ex) {
+           
+        }
+       
+       
     }//GEN-LAST:event_btnAddActionPerformed
 
+    
+      public void blancos()
+    {
+       //jid1.setText(null);
+        txtCode.setText(null);
+        txtName.setText(null);
+        txtPrice.setText(null);
+        spnCant.setValue(null);
+        txtCode.setEditable(true);
+        txtCode.requestFocus();
+     }
+    
+    
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
        int row = tblProducts.getSelectedRow();
        tblModel.removeRow(row);
